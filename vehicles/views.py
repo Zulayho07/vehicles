@@ -1,6 +1,9 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from .models import Brand, Car
-from .serializers import BrandSerializer, CarSerializer
+from .models import Brand, Car, Comment
+from .serializers import BrandSerializer, CarSerializer, CommentSerializer
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
+from .permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
 
 
 class BrandListCreateAPIView(ListCreateAPIView):
@@ -38,3 +41,38 @@ class CarListCreateAPIView(ListCreateAPIView):
 class CarRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Car.objects.all()
     serializer_class = CarSerializer
+    permission_classes = [IsAdminOrReadOnly]
+
+
+
+class CommentListCreateAPIView(ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+
+    def perform_create(self, serializer):
+        serializer.validated_date['user'] = self.request.user
+        serializer.validated_date['car_id'] = self.kwargs.get('car_id')
+        serializer.save()
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
+
+
+class CommentRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthorOrReadOnly]
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
+
+
+

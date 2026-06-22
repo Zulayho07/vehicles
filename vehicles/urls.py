@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (BrandListCreateAPIView, BrandRetrieveUpdateDestroyAPIView,
-    CarListCreateAPIView, CarRetrieveUpdateDestroyAPIView)
+                    CarListCreateAPIView, CarRetrieveUpdateDestroyAPIView, CommentListCreateAPIView,
+                    CommentRetrieveUpdateDestroyAPIView)
 
 urlpatterns = [
     path('brands/', BrandListCreateAPIView.as_view()),
@@ -8,4 +9,7 @@ urlpatterns = [
 
     path('cars/', CarListCreateAPIView.as_view()),
     path('cars/<int:pk>/', CarRetrieveUpdateDestroyAPIView.as_view()),
+
+    path('comments/', CommentListCreateAPIView.as_view()),
+    path('comments/<int:pk>/', CommentRetrieveUpdateDestroyAPIView.as_view()),
 ]
