@@ -8,7 +8,7 @@ from .views import BrandApiViewSet, CarAPIViewSet
 
 
 router=SimpleRouter()
-router.register('categories', BrandApiViewSet)
+router.register('brands', BrandApiViewSet)
 router.register('cars', CarAPIViewSet)
 
 

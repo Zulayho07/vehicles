@@ -2,12 +2,15 @@ from rest_framework import serializers
 from .models import Brand, Car, Comment
 
 class BrandSerializer(serializers.ModelSerializer):
+    cars = serializers.StringRelatedField(many=True, source='car_set')
+
     class Meta:
         model = Brand
         fields = '__all__'
 
 
 class CarSerializer(serializers.ModelSerializer):
+    comments = serializers.StringRelatedField(many=True)
 
     my_brand = serializers.ChoiceField(choices=Car.objects.all(), write_only=True)
 
